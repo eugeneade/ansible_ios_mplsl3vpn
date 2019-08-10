@@ -1,0 +1,63 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+hostname {{item.hostname}}
+boot-start-marker
+boot-end-marker
+logging message-counter syslog
+no aaa new-model
+ip source-route
+no ip icmp rate-limit unreachable
+ip cef
+no ip domain lookup
+no ipv6 cef
+interface Loopback0
+ ip address {{item.loopback}} {{item.maska}}
+interface Ethernet0/1
+ ip address {{item.ipb}} {{item.maskc}}
+ mpls ip
+ no shutdown
+interface Ethernet0/2
+ ip address {{item.ipc}} {{item.maskc}}
+ mpls ip
+ no shutdown
+router ospf 1
+ log-adjacency-changes
+ network {{item.neighbora}} 0.0.0.255 area 0
+ network {{item.neighborb}} 0.0.0.255 area 0
+router bgp 64512
+ no bgp default ipv4-unicast
+ bgp cluster-id 100
+ bgp log-neighbor-changes
+ neighbor {{item.bgpneighbor1}} remote-as 64512
+ neighbor {{item.bgpneighbor1}} update-source Loopback0
+ neighbor {{item.bgpneighbor2}} remote-as 64512
+ neighbor {{item.bgpneighbor2}} update-source Loopback0
+ neighbor {{item.bgpneighbor3}} remote-as 64512
+ neighbor {{item.bgpneighbor3}} update-source Loopback0
+ address-family ipv4
+  neighbor {{item.bgpneighbor1}} activate
+  neighbor {{item.bgpneighbor1}} send-community extended
+  neighbor {{item.bgpneighbor1}} route-reflector-client
+  neighbor {{item.bgpneighbor2}} activate
+  neighbor {{item.bgpneighbor2}} send-community extended
+  neighbor {{item.bgpneighbor3}} activate
+  neighbor {{item.bgpneighbor3}} send-community extended
+  neighbor {{item.bgpneighbor3}} route-reflector-client
+  no auto-summary
+  no synchronization
+ exit-address-family
+ address-family vpnv4
+  neighbor {{item.bgpneighbor1}} activate
+  neighbor {{item.bgpneighbor1}} send-community extended
+  neighbor {{item.bgpneighbor1}} route-reflector-client
+  neighbor {{item.bgpneighbor2}} activate
+  neighbor {{item.bgpneighbor2}} send-community extended
+  neighbor {{item.bgpneighbor3}} activate
+  neighbor {{item.bgpneighbor3}} send-community extended
+  neighbor {{item.bgpneighbor3}} route-reflector-client
+ exit-address-family
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+

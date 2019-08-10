@@ -1,0 +1,19 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+hostname {{item.hostname}}
+boot-start-marker
+boot-end-marker
+no ip icmp rate-limit unreachable
+ip cef
+no ip domain lookup
+interface Ethernet0/1
+ description Link to ISP
+ ip address {{item.ipb}} {{item.maskb}}
+ no shutdown
+interface Ethernet0/2
+ description LAN
+ ip address {{item.ipc}} {{item.maskc}}
+ no shutdown
+ip forward-protocol nd
+ip route {{item.route}} 

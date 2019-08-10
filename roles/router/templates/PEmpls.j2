@@ -1,0 +1,65 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+hostname {{item.hostname}}
+no aaa new-model
+ip source-route
+no ip icmp rate-limit unreachable
+ip cef
+ip vrf {{item.CE}}
+ rd 64512:{{item.rd}}
+ route-target export 64512:{{item.rd}}
+ route-target import 64512:{{item.rd}}
+no ip domain lookup
+no ipv6 cef
+multilink bundle-name authenticated
+interface Loopback0
+ ip address {{item.loopback}} {{item.maska}}
+interface Ethernet0/2
+ ip address {{item.ipb}} {{item.maskc}}
+ mpls ip
+ no shutdown
+interface Ethernet0/1
+ description WAN link to {{item.CE}}
+ ip vrf forwarding {{item.CE}}
+ ip address {{item.ipc}} {{item.maskc}}
+ no shutdown
+router ospf 1
+ log-adjacency-changes
+ redistribute connected subnets
+ redistribute static subnets
+ network {{item.ospfnetworka}} 0.0.0.255 area 0
+ network {{item.ospfnetworkb}} 0.0.0.255 area 0
+router bgp 64512
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor {{item.bgpneighbora}} remote-as 64512
+ neighbor {{item.bgpneighbora}} update-source Loopback0
+ neighbor {{item.bgpneighborb}} remote-as 64512
+ neighbor {{item.bgpneighborb}} update-source Loopback0
+ address-family ipv4
+  redistribute connected
+  redistribute static
+  redistribute ospf 1
+  neighbor {{item.bgpneighbora}} activate
+  neighbor {{item.bgpneighbora}} send-community extended
+  neighbor {{item.bgpneighborb}} activate
+  neighbor {{item.bgpneighborb}} send-community extended
+  no auto-summary
+  no synchronization
+ exit-address-family
+ address-family vpnv4
+  neighbor {{item.bgpneighbora}} activate
+  neighbor {{item.bgpneighbora}} send-community extended
+  neighbor {{item.bgpneighborb}} activate
+  neighbor {{item.bgpneighborb}} send-community extended
+ exit-address-family
+ address-family ipv4 vrf {{item.CE}}
+  redistribute connected
+  redistribute static
+  no synchronization
+ exit-address-family
+ip forward-protocol nd
+ip route vrf {{item.CE}} {{item.route}}
+no ip http server
+no ip http secure-server

@@ -1,0 +1,71 @@
+---
+cempls:
+   - hostname: CE1
+     ipb: 192.168.1.2
+     maskb: 255.255.255.252
+     ipc: 10.1.1.1
+     maskc: 255.255.255.0
+     route: 0.0.0.0 0.0.0.0 192.168.1.1
+
+   - hostname: CE2
+     ipb: 192.168.1.6
+     maskb: 255.255.255.252
+     ipc: 10.1.2.1
+     maskc: 255.255.255.0
+     route: 0.0.0.0 0.0.0.0 192.168.1.5
+
+
+pempls:
+   - hostname: PE1
+     CE: CE1
+     rd: 200
+     loopback: 70.1.1.1
+     maska: 255.255.255.255
+     ipb: 70.1.2.1 
+     maskc: 255.255.255.252
+     ipc: 192.168.1.1
+     ospfnetworka: 70.1.1.0
+     ospfnetworkb: 70.1.2.0
+     bgpneighbora: 70.1.1.2
+     bgpneighborb: 70.1.1.3
+     route: 10.1.1.0 255.255.255.0 192.168.1.2
+
+   - hostname: PE2
+     CE: CE2
+     rd: 200
+     loopback: 70.1.1.4
+     maska: 255.255.255.255
+     ipb: 70.1.2.10
+     maskc: 255.255.255.252
+     ipc: 192.168.1.5
+     ospfnetworka: 70.1.1.0
+     ospfnetworkb: 70.1.2.0
+     bgpneighbora: 70.1.1.2
+     bgpneighborb: 70.1.1.3
+     route: 10.1.2.0 255.255.255.0 192.168.1.6
+
+
+pmpls:
+  - hostname: P1
+    loopback: 70.1.1.2
+    maska: 255.255.255.255
+    ipb: 70.1.2.5
+    maskc: 255.255.255.252
+    ipc: 70.1.2.2
+    neighbora: 70.1.1.0
+    neighborb: 70.1.2.0
+    bgpneighbor1: 70.1.1.1
+    bgpneighbor2: 70.1.1.3
+    bgpneighbor3: 70.1.1.4
+
+  - hostname: P2
+    loopback: 70.1.1.3
+    maska: 255.255.255.255
+    ipb: 70.1.2.6
+    maskc: 255.255.255.252
+    ipc: 70.1.2.9
+    neighbora: 70.1.1.0
+    neighborb: 70.1.2.0
+    bgpneighbor1: 70.1.1.1
+    bgpneighbor2: 70.1.1.2
+    bgpneighbor3: 70.1.1.4

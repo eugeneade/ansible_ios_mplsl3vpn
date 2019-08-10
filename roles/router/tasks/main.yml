@@ -1,0 +1,15 @@
+---
+- name: Generate CE configuration files
+  template: src=CEmpls.j2 dest=/etc/ansible/CONFIGS/{{item.hostname}}.txt
+  with_items: "{{ cempls }}"
+
+- name: Generate PE configuration files
+  template: src=PEmpls.j2 dest=/etc/ansible/CONFIGS/{{item.hostname}}.txt
+  with_items: "{{ pempls }}"
+
+- name: Generate P configuration files
+  template: src=Pmpls.j2 dest=/etc/ansible/CONFIGS/{{item.hostname}}.txt
+  with_items: "{{ pmpls }}"
+
+
+
