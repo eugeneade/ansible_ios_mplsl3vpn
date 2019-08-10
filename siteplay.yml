@@ -1,0 +1,109 @@
+---
+- name: Generate Router Configuration Files
+  hosts: localhost
+  gather_facts: no
+  ignore_errors: yes
+
+  roles:
+   - router
+
+- name: CONFIGURE MPLS on CE1
+  hosts: CE1
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on CE1
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/CE1.txt"
+
+- name: CONFIGURE MPLS on CE2
+  hosts: CE2
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on CE2
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/CE2.txt"
+
+- name: CONFIGURE MPLS on PE1
+  hosts: PE1
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on PE1
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/PE1.txt"
+
+- name: CONFIGURE MPLS on PE2
+  hosts: PE2
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on PE2
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/PE2.txt"
+
+- name: CONFIGURE MPLS on P1
+  hosts: P1
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on P1
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/P1.txt"
+
+- name: CONFIGURE MPLS on P2
+  hosts: P2
+  gather_facts: no
+  connection: network_cli
+  ignore_errors: yes
+
+  vars:
+    cli:
+      username: group19
+      password: cisco
+
+  tasks:
+    - name: Config MPLS on P2
+      ios_config:
+        provider: "{{ cli }}"
+        src: "/etc/ansible/CONFIGS/P2.txt"
